@@ -70,7 +70,7 @@ export default function AgradecimentoPage() {
               src="/alpha-logo-white.png"
               alt="Alpha Jurídico"
               width={200}
-              height={54}
+              height={57}
               priority
               className="relative z-10"
             />

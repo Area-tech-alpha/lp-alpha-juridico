@@ -1,8 +1,5 @@
 import Image from "next/image";
 
-// TODO: trocar SEU_VIDEO_ID_AQUI pelo ID real do vídeo do YouTube.
-const YOUTUBE_VIDEO_ID = "SEU_VIDEO_ID_AQUI";
-
 // Rendered identically by both /obrigado and /agradecimento — the route is
 // the only thing that differs, and only for internal analytics/CRM. Never
 // add a prop here that changes what the visitor sees.
@@ -25,24 +22,8 @@ export default function ThankYouPage() {
           <p className="thanks-intro">
             Recebemos suas respostas. Nossa equipe vai analisar o cenário do
             seu escritório e entrar em contato pelo WhatsApp para agendar
-            uma conversa. Antes disso, assista ao vídeo abaixo.
+            uma conversa.
           </p>
-        </section>
-
-        <section className="thanks-video-card" aria-label="Vídeo de preparação">
-          <div className="thanks-video-frame">
-            <iframe
-              src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?rel=0`}
-              title="Como se preparar para o diagnóstico Alpha Jurídico"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
-          <div className="thanks-video-caption">
-            <strong>Assista antes da reunião</strong>
-            <span>Separe alguns minutos e veja o vídeo até o final.</span>
-          </div>
         </section>
 
         <section className="thanks-process-card">
