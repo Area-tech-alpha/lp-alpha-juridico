@@ -366,7 +366,22 @@ input:focus, select:focus, textarea:focus { border-color: var(--brand); box-shad
 }
 @media (max-width: 760px) {
   .form-shell { display: block; overflow: visible }
-  .brand-panel { display: none }
+  .brand-panel {
+    position: static;
+    display: flex;
+    min-height: 0;
+    height: auto;
+    width: 100%;
+    padding: 28px 20px;
+    order: -1;
+  }
+  .brand-panel-content { padding: 0; min-height: 0 }
+  .brand-panel-logo { width: 40px; height: 40px; padding: 7px; margin-bottom: 12px }
+  .brand-panel-copy { margin-top: 16px; max-width: 100% }
+  .brand-panel-copy h2 { font-size: 22px; line-height: 1.25 }
+  .brand-panel-copy p { font-size: 14px }
+  .brand-pill-row { margin-top: 16px }
+  .brand-pill-row span { font-size: 12px; padding: 6px 10px }
   .form-panel { min-height: 100svh; padding: 20px 22px 18px }
   .form-header { min-height: 44px }
   .brand-mark { width: 28px; height: 28px }
