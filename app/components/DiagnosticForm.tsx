@@ -188,7 +188,7 @@ export default function DiagnosticForm() {
   const firstName = data.nome.trim().split(" ")[0] || "";
 
   const eyebrow = [
-    "Bom ter você aqui nessa sessão gratuita!",
+    "Bom ter você aqui !",
     `Prazer, ${firstName}!`,
     "Agora precisamos do seu melhor contato profissional.",
     "Vamos conhecer melhor o seu escritório.",
