@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 declare global {
@@ -43,10 +44,10 @@ const AREA_OPTIONS = [
 ];
 
 const TEAM_SIZE_OPTIONS = [
-  "Sou apenas eu",
-  "De 1 a 3 advogados",
-  "De 3 a 6 advogados",
   "Acima de 6 advogados",
+  "De 3 a 6 advogados",
+  "De 1 a 3 advogados",
+  "Sou apenas eu",
 ];
 
 // Only "Sou apenas eu" disqualifies the lead; the other three team sizes
@@ -54,11 +55,11 @@ const TEAM_SIZE_OPTIONS = [
 const DISQUALIFYING_TEAM_SIZE = "Sou apenas eu";
 
 const REVENUE_OPTIONS = [
-  "De R$ 0 a R$ 5 mil",
-  "De R$ 5 mil a R$ 20 mil",
-  "De R$ 20 mil a R$ 50 mil",
-  "De R$ 50 mil a R$ 80 mil",
   "Mais de R$ 80 mil",
+  "De R$ 50 mil a R$ 80 mil",
+  "De R$ 20 mil a R$ 50 mil",
+  "De R$ 5 mil a R$ 20 mil",
+  "De R$ 0 a R$ 5 mil",
 ];
 
 const TESTIMONIALS: Testimonial[] = [
@@ -96,10 +97,8 @@ const TESTIMONIALS: Testimonial[] = [
 
 const TOTAL_STEPS = 6;
 
-// Pre-existing pages on the main Alpha domain — not part of this app, so we
-// redirect with a full navigation rather than the Next.js router.
-const QUALIFIED_URL = "https://cadastro.assessorialpha.com/obrigado";
-const DISQUALIFIED_URL = "https://cadastro.assessorialpha.com/agradecimento";
+const QUALIFIED_URL = "/obrigado";
+const DISQUALIFIED_URL = "/agradecimento";
 
 function formatPhoneDisplay(digits: string) {
   const ddd = digits.slice(0, 2);
@@ -128,6 +127,7 @@ function readAttribution(): Attribution {
 }
 
 export default function DiagnosticForm() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [attemptedStep, setAttemptedStep] = useState<number | null>(null);
   const [data, setData] = useState<FormData>({
@@ -249,7 +249,7 @@ export default function DiagnosticForm() {
       }
     }
 
-    window.location.href = qualificado ? QUALIFIED_URL : DISQUALIFIED_URL;
+    router.push(qualificado ? QUALIFIED_URL : DISQUALIFIED_URL);
   }
 
   function goNext() {
