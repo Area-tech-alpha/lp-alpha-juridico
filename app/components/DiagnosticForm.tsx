@@ -100,6 +100,10 @@ const TOTAL_STEPS = 6;
 const QUALIFIED_URL = "/obrigado";
 const DISQUALIFIED_URL = "/agradecimento";
 
+const ORIGEM = "juridico";
+const LEAD_WEBHOOK_URL =
+  "https://webhook3.assessorialpha.com/webhook/197edb9e-9848-472f-8aaa-76bed45da2a5";
+
 function formatPhoneDisplay(digits: string) {
   const ddd = digits.slice(0, 2);
   const rest = digits.slice(2);
@@ -233,6 +237,13 @@ export default function DiagnosticForm() {
         body: JSON.stringify(payload),
       }).catch(() => { });
     }
+
+    fetch(LEAD_WEBHOOK_URL, {
+      method: "POST",
+      keepalive: true,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...payload, origem: ORIGEM }),
+    }).catch(() => { });
 
     if (!hasFiredLeadEventRef.current) {
       hasFiredLeadEventRef.current = true;
