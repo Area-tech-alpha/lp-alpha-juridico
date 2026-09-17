@@ -505,7 +505,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--brand); box-shad
 .thanks-steps li p { margin: 0; color: var(--ink); font-size: 15px; line-height: 1.5 }
 
 .px-anchor {
-  position: absolute;
+  position: fixed;
+  top: 50px;
+  left: 50px;
   width: 1px;
   height: 1px;
   padding: 0;
@@ -513,6 +515,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--brand); box-shad
   opacity: 0;
   overflow: hidden;
   border: 0;
+  z-index: 9999;
 }
 
 } /* end @layer base */
