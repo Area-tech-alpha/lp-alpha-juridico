@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 // Rendered identically by both /obrigado and /agradecimento — the route is
 // the only thing that differs, and only for internal analytics/CRM. Never
@@ -48,7 +49,15 @@ export default function ThankYouPage() {
         </section>
       </div>
 
-      <button type="button" id="px-anchor" className="px-anchor" aria-hidden="true" tabIndex={-1} />
+      <Link
+        href="/"
+        id="px-anchor"
+        className="px-anchor"
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        &nbsp;
+      </Link>
     </main>
   );
 }
