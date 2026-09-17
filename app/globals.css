@@ -504,4 +504,23 @@ input:focus, select:focus, textarea:focus { border-color: var(--brand); box-shad
 }
 .thanks-steps li p { margin: 0; color: var(--ink); font-size: 15px; line-height: 1.5 }
 
+/* Botão "Voltar ao início" — revelado após o clique no botão invisível
+   de rastreamento. Fixo no topo, fora do fluxo, não desloca o layout. */
+.px-anchor-back {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  background: var(--brand);
+  color: #17130a;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  transition: filter 0.16s;
+}
+.px-anchor-back:hover { filter: brightness(0.95); }
+
 } /* end @layer base */

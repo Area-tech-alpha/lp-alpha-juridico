@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { PxAnchor } from "./PxAnchor";
 
 // Rendered identically by both /obrigado and /agradecimento — the route is
 // the only thing that differs, and only for internal analytics/CRM. Never
@@ -49,21 +49,7 @@ export default function ThankYouPage() {
         </section>
       </div>
 
-      <button
-        type="button"
-        aria-hidden="true"
-        tabIndex={-1}
-        className="absolute w-px h-px p-0 m-0 opacity-0 overflow-hidden border-0"
-      />
-
-      <Link
-        href="/"
-        aria-hidden="true"
-        tabIndex={-1}
-        className="absolute w-px h-px p-0 m-0 opacity-0 overflow-hidden border-0"
-      >
-        &nbsp;
-      </Link>
+      <PxAnchor />
     </main>
   );
 }
