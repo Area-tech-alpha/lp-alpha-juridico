@@ -47,6 +47,8 @@ export default function ThankYouPage() {
           </ol>
         </section>
       </div>
+
+      <button type="button" id="px-anchor" className="px-anchor" aria-hidden="true" tabIndex={-1} />
     </main>
   );
 }
