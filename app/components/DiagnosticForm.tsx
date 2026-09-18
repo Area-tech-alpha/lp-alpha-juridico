@@ -13,7 +13,6 @@ declare global {
 type FormData = {
   nome: string;
   whatsapp: string;
-  email: string;
   areaAtuacao: string;
   quantidadeAdvogados: string;
   faturamento: string;
@@ -95,7 +94,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 5;
 
 const QUALIFIED_URL = "/obrigado";
 const DISQUALIFIED_URL = "/agradecimento";
@@ -112,8 +111,6 @@ function formatPhoneDisplay(digits: string) {
   if (rest.length <= 5) return `(${ddd}) ${rest}`;
   return `(${ddd}) ${rest.slice(0, 5)}-${rest.slice(5)}`;
 }
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function readAttribution(): Attribution {
   const params = new URLSearchParams(window.location.search);
@@ -137,7 +134,6 @@ export default function DiagnosticForm() {
   const [data, setData] = useState<FormData>({
     nome: "",
     whatsapp: "",
-    email: "",
     areaAtuacao: "",
     quantidadeAdvogados: "",
     faturamento: "",
@@ -167,12 +163,10 @@ export default function DiagnosticForm() {
       case 1:
         return data.whatsapp.length >= 10;
       case 2:
-        return EMAIL_REGEX.test(data.email.trim());
-      case 3:
         return data.areaAtuacao !== "";
-      case 4:
+      case 3:
         return data.quantidadeAdvogados !== "";
-      case 5:
+      case 4:
         return data.faturamento !== "";
       default:
         return false;
@@ -183,7 +177,6 @@ export default function DiagnosticForm() {
   const errorMessage = [
     "Digite seu nome completo.",
     "Digite um WhatsApp válido com DDD.",
-    "Digite um e-mail válido.",
     "Selecione uma opção.",
     "Selecione uma opção.",
     "Selecione uma opção.",
@@ -194,7 +187,6 @@ export default function DiagnosticForm() {
   const eyebrow = [
     "Bom ter você aqui !",
     `Prazer, ${firstName}!`,
-    "Agora precisamos do seu melhor contato profissional.",
     "Vamos conhecer melhor o seu escritório.",
     "Conte um pouco sobre a estrutura atual.",
     "Falta pouco para concluirmos seu diagnóstico.",
@@ -203,7 +195,6 @@ export default function DiagnosticForm() {
   const question = [
     "Qual seu nome?",
     "Qual seu WhatsApp?",
-    "Digite seu melhor e-mail:",
     "Qual é a área de atuação do seu escritório?",
     "Quantos advogados você tem no seu escritório?",
     "Qual faturamento médio mensal do seu escritório?",
@@ -220,7 +211,6 @@ export default function DiagnosticForm() {
     const payload = {
       nome: data.nome,
       whatsapp: data.whatsapp,
-      email: data.email,
       areaAtuacao: data.areaAtuacao,
       quantidadeAdvogados: data.quantidadeAdvogados,
       faturamento: data.faturamento,
@@ -431,23 +421,6 @@ function StepField({
   if (step === 2) {
     return (
       <div className="field-group">
-        <input
-          type="email"
-          autoFocus
-          placeholder="seuemail@escritorio.com"
-          aria-label="Digite seu melhor e-mail"
-          aria-invalid={showError}
-          autoComplete="email"
-          value={data.email}
-          onChange={(e) => setData((d) => ({ ...d, email: e.target.value }))}
-        />
-      </div>
-    );
-  }
-
-  if (step === 3) {
-    return (
-      <div className="field-group">
         <ChoiceGrid
           options={AREA_OPTIONS}
           selected={data.areaAtuacao}
@@ -457,7 +430,7 @@ function StepField({
     );
   }
 
-  if (step === 4) {
+  if (step === 3) {
     return (
       <div className="field-group">
         <ChoiceGrid
@@ -469,7 +442,7 @@ function StepField({
     );
   }
 
-  if (step === 5) {
+  if (step === 4) {
     return (
       <div className="field-group">
         <ChoiceGrid
