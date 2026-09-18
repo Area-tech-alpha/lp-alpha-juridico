@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ConfigPeek } from "./ConfigPeek";
 
 // Rendered identically by both /obrigado and /agradecimento — the route is
 // the only thing that differs, and only for internal analytics/CRM. Never
@@ -50,11 +49,7 @@ export default function ThankYouPage() {
         </section>
       </div>
 
-      <Link href="/" className="botao-voltar-home">
-        Voltar para o início
-      </Link>
-
-      <ConfigPeek />
+      <Link href="/" aria-label="Voltar para o início" className="voltar-inicio-dot" />
     </main>
   );
 }
