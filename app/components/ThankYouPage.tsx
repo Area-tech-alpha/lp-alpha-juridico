@@ -49,7 +49,9 @@ export default function ThankYouPage() {
         </section>
       </div>
 
-      <Link href="/" aria-label="Voltar para o início" className="voltar-inicio-dot" />
+      <Link href="/" className="voltar-inicio-dot">
+        Voltar
+      </Link>
     </main>
   );
 }
