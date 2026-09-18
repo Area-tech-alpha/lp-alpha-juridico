@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { PxAnchor } from "./PxAnchor";
+import Link from "next/link";
+import { ConfigPeek } from "./ConfigPeek";
 
 // Rendered identically by both /obrigado and /agradecimento — the route is
 // the only thing that differs, and only for internal analytics/CRM. Never
@@ -49,7 +50,11 @@ export default function ThankYouPage() {
         </section>
       </div>
 
-      <PxAnchor />
+      <Link href="/" className="botao-voltar-home">
+        Voltar para o início
+      </Link>
+
+      <ConfigPeek />
     </main>
   );
 }
