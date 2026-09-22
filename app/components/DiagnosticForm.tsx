@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -94,8 +94,6 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-const TOTAL_STEPS = 5;
-
 const QUALIFIED_URL = "/obrigado";
 const DISQUALIFIED_URL = "/agradecimento";
 
@@ -127,10 +125,25 @@ function readAttribution(): Attribution {
   };
 }
 
+function validateField(id: keyof FormData, data: FormData): string | null {
+  switch (id) {
+    case "nome":
+      return data.nome.trim().length > 1 ? null : "Digite seu nome completo.";
+    case "whatsapp":
+      return data.whatsapp.length >= 10 ? null : "Digite um WhatsApp válido com DDD.";
+    case "areaAtuacao":
+      return data.areaAtuacao !== "" ? null : "Selecione uma opção.";
+    case "quantidadeAdvogados":
+      return data.quantidadeAdvogados !== "" ? null : "Selecione uma opção.";
+    case "faturamento":
+      return data.faturamento !== "" ? null : "Selecione uma opção.";
+    default:
+      return null;
+  }
+}
+
 export default function DiagnosticForm() {
   const router = useRouter();
-  const [step, setStep] = useState(0);
-  const [attemptedStep, setAttemptedStep] = useState<number | null>(null);
   const [data, setData] = useState<FormData>({
     nome: "",
     whatsapp: "",
@@ -138,6 +151,7 @@ export default function DiagnosticForm() {
     quantidadeAdvogados: "",
     faturamento: "",
   });
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
 
   const attributionRef = useRef<Attribution>({
     utm_source: null,
@@ -156,64 +170,19 @@ export default function DiagnosticForm() {
     attributionRef.current = readAttribution();
   }, []);
 
-  const isValid = useMemo(() => {
-    switch (step) {
-      case 0:
-        return data.nome.trim().length > 1;
-      case 1:
-        return data.whatsapp.length >= 10;
-      case 2:
-        return data.areaAtuacao !== "";
-      case 3:
-        return data.quantidadeAdvogados !== "";
-      case 4:
-        return data.faturamento !== "";
-      default:
-        return false;
-    }
-  }, [step, data]);
-
-  const showError = attemptedStep === step && !isValid;
-  const errorMessage = [
-    "Digite seu nome completo.",
-    "Digite um WhatsApp válido com DDD.",
-    "Selecione uma opção.",
-    "Selecione uma opção.",
-    "Selecione uma opção.",
-  ][step];
-
-  const firstName = data.nome.trim().split(" ")[0] || "";
-
-  const eyebrow = [
-    "Bom ter você aqui !",
-    `Prazer, ${firstName}!`,
-    "Vamos conhecer melhor o seu escritório.",
-    "Conte um pouco sobre a estrutura atual.",
-    "Falta pouco para concluirmos seu diagnóstico.",
-  ][step];
-
-  const question = [
-    "Qual seu nome?",
-    "Qual seu WhatsApp?",
-    "Qual é a área de atuação do seu escritório?",
-    "Quantos advogados você tem no seu escritório?",
-    "Qual faturamento médio mensal do seu escritório?",
-  ][step];
-
-  function goBack() {
-    if (step === 0) return;
-    setAttemptedStep(null);
-    setStep((s) => s - 1);
+  function updateField(id: keyof FormData, value: string) {
+    setData((d) => ({ ...d, [id]: value }));
+    if (errors[id]) setErrors((prev) => ({ ...prev, [id]: undefined }));
   }
 
-  function submitLead() {
-    const qualificado = data.quantidadeAdvogados !== DISQUALIFYING_TEAM_SIZE;
+  function submitLead(finalData: FormData) {
+    const qualificado = finalData.quantidadeAdvogados !== DISQUALIFYING_TEAM_SIZE;
     const payload = {
-      nome: data.nome,
-      whatsapp: data.whatsapp,
-      areaAtuacao: data.areaAtuacao,
-      quantidadeAdvogados: data.quantidadeAdvogados,
-      faturamento: data.faturamento,
+      nome: finalData.nome,
+      whatsapp: finalData.whatsapp,
+      areaAtuacao: finalData.areaAtuacao,
+      quantidadeAdvogados: finalData.quantidadeAdvogados,
+      faturamento: finalData.faturamento,
       qualificado,
       attribution: attributionRef.current,
     };
@@ -253,21 +222,30 @@ export default function DiagnosticForm() {
     router.push(qualificado ? QUALIFIED_URL : DISQUALIFIED_URL);
   }
 
-  function goNext() {
-    if (!isValid) {
-      setAttemptedStep(step);
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const fields: (keyof FormData)[] = [
+      "nome",
+      "whatsapp",
+      "areaAtuacao",
+      "quantidadeAdvogados",
+      "faturamento",
+    ];
+    const nextErrors: Partial<Record<keyof FormData, string>> = {};
+    for (const field of fields) {
+      const err = validateField(field, data);
+      if (err) nextErrors[field] = err;
+    }
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
       return;
     }
-    if (step === TOTAL_STEPS - 1) {
-      submitLead();
-      return;
-    }
-    setAttemptedStep(null);
-    setStep((s) => s + 1);
+
+    submitLead(data);
   }
 
-  const testimonial = TESTIMONIALS[step];
-  const progressPercent = (step / TOTAL_STEPS) * 100;
+  const testimonial = TESTIMONIALS[0];
 
   return (
     <main className="form-shell">
@@ -294,50 +272,107 @@ export default function DiagnosticForm() {
       </aside>
 
       <section className="form-panel">
-        <div className="progress-track" aria-hidden="true">
-          <span style={{ height: `${progressPercent}%` }} />
-        </div>
-
         <header className="form-header">
-          <button
-            className="back-button"
-            type="button"
-            onClick={goBack}
-            disabled={step === 0}
-            aria-label="Voltar para a etapa anterior"
-          >
-            ←
-          </button>
           <img className="brand-mark" src="/alpha-mark-icon.png" alt="Alpha Jurídico" />
         </header>
 
         <div className="content-stack">
-          <form
-            className="question-card"
-            noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              goNext();
-            }}
-          >
+          <form className="question-card compact-form" noValidate onSubmit={handleSubmit}>
             <div className="question-copy">
-              <p className="eyebrow">{eyebrow}</p>
-              <h1>{question}</h1>
+              <p className="eyebrow">Preencha e um especialista entra em contato</p>
+              <h1>Quero saber mais</h1>
             </div>
 
-            <StepField
-              step={step}
-              data={data}
-              setData={setData}
-              showError={showError}
-            />
-            <p className="error-message" role="alert">
-              {showError ? errorMessage : ""}
-            </p>
+            <div className="field-group">
+              <label className="field-label" htmlFor="nome">Qual seu nome?</label>
+              <input
+                id="nome"
+                type="text"
+                placeholder="Digite sua resposta..."
+                required
+                aria-invalid={Boolean(errors.nome)}
+                autoComplete="name"
+                value={data.nome}
+                onChange={(e) => updateField("nome", e.target.value)}
+              />
+              {errors.nome ? <p className="error-message" role="alert">{errors.nome}</p> : null}
+            </div>
+
+            <div className="field-group">
+              <label className="field-label" htmlFor="whatsapp">Qual seu WhatsApp?</label>
+              <div className="phone-control">
+                <span className="phone-prefix">+55</span>
+                <input
+                  id="whatsapp"
+                  type="tel"
+                  placeholder="(11) 99999-9999"
+                  required
+                  aria-invalid={Boolean(errors.whatsapp)}
+                  autoComplete="tel-national"
+                  value={formatPhoneDisplay(data.whatsapp)}
+                  onChange={(e) =>
+                    updateField("whatsapp", e.target.value.replace(/\D/g, "").slice(0, 11))
+                  }
+                />
+              </div>
+              <p className="helper-text">Obs.: Não coloque o número do seu escritório.</p>
+              {errors.whatsapp ? <p className="error-message" role="alert">{errors.whatsapp}</p> : null}
+            </div>
+
+            <div className="field-group">
+              <label className="field-label" htmlFor="areaAtuacao">Qual é a área de atuação do seu escritório?</label>
+              <select
+                id="areaAtuacao"
+                value={data.areaAtuacao}
+                required
+                aria-invalid={Boolean(errors.areaAtuacao)}
+                onChange={(e) => updateField("areaAtuacao", e.target.value)}
+              >
+                <option value="" disabled>Selecione uma área de atuação</option>
+                {AREA_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+              {errors.areaAtuacao ? <p className="error-message" role="alert">{errors.areaAtuacao}</p> : null}
+            </div>
+
+            <div className="field-group">
+              <label className="field-label" htmlFor="quantidadeAdvogados">Quantos advogados você tem no seu escritório?</label>
+              <select
+                id="quantidadeAdvogados"
+                value={data.quantidadeAdvogados}
+                required
+                aria-invalid={Boolean(errors.quantidadeAdvogados)}
+                onChange={(e) => updateField("quantidadeAdvogados", e.target.value)}
+              >
+                <option value="" disabled>Selecione o tamanho da sua equipe</option>
+                {TEAM_SIZE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+              {errors.quantidadeAdvogados ? <p className="error-message" role="alert">{errors.quantidadeAdvogados}</p> : null}
+            </div>
+
+            <div className="field-group">
+              <label className="field-label" htmlFor="faturamento">Qual faturamento médio mensal do seu escritório?</label>
+              <select
+                id="faturamento"
+                value={data.faturamento}
+                required
+                aria-invalid={Boolean(errors.faturamento)}
+                onChange={(e) => updateField("faturamento", e.target.value)}
+              >
+                <option value="" disabled>Selecione um faturamento mensal</option>
+                {REVENUE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+              {errors.faturamento ? <p className="error-message" role="alert">{errors.faturamento}</p> : null}
+            </div>
 
             <div className="action-row">
               <button className="primary-button" type="submit">
-                {step === TOTAL_STEPS - 1 ? "ENVIAR" : "CONFIRMAR"}
+                ENVIAR
                 <span>→</span>
               </button>
             </div>
@@ -361,123 +396,5 @@ export default function DiagnosticForm() {
         </footer>
       </section>
     </main>
-  );
-}
-
-function StepField({
-  step,
-  data,
-  setData,
-  showError,
-}: {
-  step: number;
-  data: FormData;
-  setData: React.Dispatch<React.SetStateAction<FormData>>;
-  showError: boolean;
-}) {
-  if (step === 0) {
-    return (
-      <div className="field-group">
-        <input
-          type="text"
-          autoFocus
-          placeholder="Digite sua resposta..."
-          aria-label="Digite sua resposta..."
-          aria-invalid={showError}
-          autoComplete="name"
-          value={data.nome}
-          onChange={(e) => setData((d) => ({ ...d, nome: e.target.value }))}
-        />
-      </div>
-    );
-  }
-
-  if (step === 1) {
-    return (
-      <div className="field-group">
-        <div className="phone-control">
-          <span className="phone-prefix">+55</span>
-          <input
-            type="tel"
-            autoFocus
-            placeholder="(11) 99999-9999"
-            aria-label="Qual seu WhatsApp?"
-            aria-invalid={showError}
-            autoComplete="tel-national"
-            value={formatPhoneDisplay(data.whatsapp)}
-            onChange={(e) =>
-              setData((d) => ({
-                ...d,
-                whatsapp: e.target.value.replace(/\D/g, "").slice(0, 11),
-              }))
-            }
-          />
-        </div>
-        <p className="helper-text">Obs.: Não coloque o número do seu escritório.</p>
-      </div>
-    );
-  }
-
-  if (step === 2) {
-    return (
-      <div className="field-group">
-        <ChoiceGrid
-          options={AREA_OPTIONS}
-          selected={data.areaAtuacao}
-          onSelect={(v) => setData((d) => ({ ...d, areaAtuacao: v }))}
-        />
-      </div>
-    );
-  }
-
-  if (step === 3) {
-    return (
-      <div className="field-group">
-        <ChoiceGrid
-          options={TEAM_SIZE_OPTIONS}
-          selected={data.quantidadeAdvogados}
-          onSelect={(v) => setData((d) => ({ ...d, quantidadeAdvogados: v }))}
-        />
-      </div>
-    );
-  }
-
-  if (step === 4) {
-    return (
-      <div className="field-group">
-        <ChoiceGrid
-          options={REVENUE_OPTIONS}
-          selected={data.faturamento}
-          onSelect={(v) => setData((d) => ({ ...d, faturamento: v }))}
-        />
-      </div>
-    );
-  }
-
-  return null;
-}
-
-function ChoiceGrid({
-  options,
-  selected,
-  onSelect,
-}: {
-  options: string[];
-  selected: string;
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <div className="choice-grid">
-      {options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          className={`choice-button${selected === opt ? " selected" : ""}`}
-          onClick={() => onSelect(opt)}
-        >
-          {opt}
-        </button>
-      ))}
-    </div>
   );
 }
