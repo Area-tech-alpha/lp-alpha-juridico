@@ -50,7 +50,55 @@ function VideoCard({ item, onPlay }: VideoCardProps) {
   // started: o usuário já clicou no play (aí entram os controles nativos).
   const [started, setStarted] = useState(false);
   const [loading, setLoading] = useState(false);
+  // Fonte atual do vídeo/capa: começa no Blob e cai para a cópia local se falhar.
+  const [videoSrc, setVideoSrc] = useState(item.videoSrc);
+  const [poster, setPoster] = useState(item.poster);
+  const switchedToFallback = useRef(false);
   const label = item.name || item.company || "cliente";
+
+  // Pré-teste da capa: se a URL principal não carregar, usa a cópia local.
+  useEffect(() => {
+    if (!item.poster || !item.posterFallback || item.poster === item.posterFallback) return;
+    const fallback = item.posterFallback;
+    const probe = new Image();
+    probe.onerror = () => setPoster(fallback);
+    probe.src = item.poster;
+    return () => {
+      probe.onerror = null;
+    };
+  }, [item.poster, item.posterFallback]);
+
+  // Depois de trocar para o fallback: recarrega e, se a pessoa já tinha
+  // clicado, retoma o play.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !switchedToFallback.current) return;
+    video.load();
+    if (!video.dataset.started) return;
+    video.play().catch(() => {
+      delete video.dataset.started;
+      setStarted(false);
+      setLoading(false);
+    });
+  }, [videoSrc]);
+
+  function backToOverlay() {
+    const video = videoRef.current;
+    if (video) delete video.dataset.started;
+    setStarted(false);
+    setLoading(false);
+  }
+
+  // Erro na fonte principal (ex.: Blob bloqueado/fora do ar): troca para a
+  // cópia local em public/videos/. Só uma vez por vídeo.
+  function handleError() {
+    if (switchedToFallback.current || !item.videoFallback || videoSrc === item.videoFallback) {
+      setLoading(false);
+      return;
+    }
+    switchedToFallback.current = true;
+    setVideoSrc(item.videoFallback);
+  }
 
   function start() {
     const video = videoRef.current;
@@ -60,10 +108,10 @@ function VideoCard({ item, onPlay }: VideoCardProps) {
     // Sem dados suficientes para tocar já: mostra o spinner até o "playing".
     if (video.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) setLoading(true);
     video.play().catch(() => {
-      // Play bloqueado/falhou: volta para o overlay.
-      delete video.dataset.started;
-      setStarted(false);
-      setLoading(false);
+      // Se a falha foi da fonte principal, o handleError já trocou para o
+      // fallback e vai retomar o play; senão, volta para o overlay.
+      if (switchedToFallback.current && video.dataset.started) return;
+      backToOverlay();
     });
   }
 
@@ -76,8 +124,8 @@ function VideoCard({ item, onPlay }: VideoCardProps) {
       <div className="video-frame">
         <video
           ref={videoRef}
-          src={item.videoSrc}
-          poster={item.poster}
+          src={videoSrc}
+          poster={poster}
           controls={started}
           playsInline
           preload="none"
@@ -86,6 +134,7 @@ function VideoCard({ item, onPlay }: VideoCardProps) {
           onLoadStart={showSpinner}
           onWaiting={showSpinner}
           onPlaying={() => setLoading(false)}
+          onError={handleError}
         />
         {started ? null : (
           <button className="video-overlay" type="button" aria-label={`Assistir depoimento de ${label}`} onClick={start}>
