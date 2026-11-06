@@ -450,6 +450,8 @@ main > .services-ticker + section.section { border-top: 0; padding-top: clamp(96
 }
 .carousel::-webkit-scrollbar { display: none }
 .carousel > li { scroll-snap-align: start; flex-shrink: 0 }
+/* até 2 cards: centralizados no desktop (no mobile segue o scroll-snap) */
+@media (min-width: 761px) { .carousel.is-few { justify-content: center } }
 
 .video-card { width: clamp(220px, 68vw, 280px) }
 .video-frame {
@@ -460,41 +462,7 @@ main > .services-ticker + section.section { border-top: 0; padding-top: clamp(96
   background: linear-gradient(160deg, #1d1d1d, #0d0d0d);
   border: 1px solid var(--line);
 }
-.video-frame video,
-.video-frame img { width: 100%; height: 100%; object-fit: cover; background: #000 }
-.video-poster-button {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-}
-.video-poster-button::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 50%, #000000aa);
-}
-.video-play {
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  width: 68px;
-  height: 68px;
-  margin: -34px 0 0 -34px;
-  border-radius: 50%;
-  background: var(--brand);
-  color: var(--ink);
-  display: grid;
-  place-items: center;
-  box-shadow: 0 0 0 8px #ffb40033;
-  transition: transform .18s, box-shadow .18s;
-}
-.video-play svg { width: 24px; height: 24px; margin-left: 3px }
-.video-poster-button:hover .video-play { transform: scale(1.06); box-shadow: 0 0 0 12px #ffb40040 }
+.video-frame video { width: 100%; height: 100%; object-fit: cover; background: #000 }
 .video-meta { padding: 14px 4px 0 }
 .video-meta strong { display: block; font-size: 16px; font-weight: 700 }
 .video-meta span { display: block; margin-top: 3px; color: var(--muted); font-size: 14px }
