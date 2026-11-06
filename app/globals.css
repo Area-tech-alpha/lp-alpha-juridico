@@ -450,7 +450,7 @@ main > .services-ticker + section.section { border-top: 0; padding-top: clamp(96
 }
 .carousel::-webkit-scrollbar { display: none }
 .carousel > li { scroll-snap-align: start; flex-shrink: 0 }
-/* até 2 cards: centralizados no desktop (no mobile segue o scroll-snap) */
+/* até 3 cards: centralizados no desktop (no mobile segue o scroll-snap) */
 @media (min-width: 761px) { .carousel.is-few { justify-content: center } }
 
 .video-card { width: clamp(220px, 68vw, 280px) }
@@ -464,6 +464,16 @@ main > .services-ticker + section.section { border-top: 0; padding-top: clamp(96
 }
 .video-frame video { width: 100%; height: 100%; object-fit: cover; background: #000 }
 .video-meta { padding: 14px 4px 0 }
+.video-highlight {
+  margin: 0 0 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--brand);
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-wrap: balance;
+}
 .video-meta strong { display: block; font-size: 16px; font-weight: 700 }
 .video-meta span { display: block; margin-top: 3px; color: var(--muted); font-size: 14px }
 
