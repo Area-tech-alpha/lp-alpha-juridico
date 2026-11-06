@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import AgradecimentoPage from "../components/AgradecimentoPage";
+import AgradecimentoPage from "@/components/results/AgradecimentoPage";
 
 export const metadata: Metadata = {
   title: "Agradecimento | Alpha Jurídico",

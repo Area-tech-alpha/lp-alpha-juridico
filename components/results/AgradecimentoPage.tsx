@@ -1,37 +1,36 @@
 import Image from "next/image";
+import Link from "next/link";
+import "@/app/results.css";
 
 export default function AgradecimentoPage() {
   return (
-    <main className="min-h-screen bg-[#fffdf9] flex items-center justify-center px-6 py-16">
-      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
-        <div className="space-y-6">
-          <span className="inline-block bg-[#f5a623] text-[#0a0a0a] text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full">
-            Assessoria Alpha
-          </span>
+    <main className="decline-page">
+      <div className="decline-grid">
+        <div className="decline-content">
+          <span className="decline-badge">Assessoria Alpha</span>
 
-          <h1 className="text-4xl md:text-5xl text-[#16130d] font-extrabold leading-tight tracking-tight">
+          <h1>
             Obrigado pelo
             <br />
             interesse!
           </h1>
 
-          <p className="text-[#79746b] text-base leading-relaxed max-w-sm">
+          <p className="decline-text">
             Analisamos cada perfil com cuidado. Se houver uma oportunidade
             de parceria, entraremos em contato com você em breve.
           </p>
 
-          <p className="text-[#f5a623] font-semibold text-base leading-relaxed">
+          <p className="decline-cta">
             Enquanto isso, acompanhe nosso conteúdo
             <br />
             e fique por dentro das novidades.
           </p>
 
-          <div className="flex items-center gap-3 pt-1">
+          <div className="decline-social">
             <a
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube da Alpha"
-              className="flex items-center justify-center w-11 h-11 rounded-md bg-black/5 hover:bg-[#f5a623] hover:text-[#0a0a0a] transition-colors text-[#16130d]"
               href="https://www.youtube.com/@assessorialpha"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -42,7 +41,6 @@ export default function AgradecimentoPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram da Alpha"
-              className="flex items-center justify-center w-11 h-11 rounded-md bg-black/5 hover:bg-[#f5a623] hover:text-[#0a0a0a] transition-colors text-[#16130d]"
               href="https://www.instagram.com/assessorialpha/"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -51,28 +49,19 @@ export default function AgradecimentoPage() {
             </a>
           </div>
 
-          <a
-            className="inline-block text-sm text-[#79746b] underline underline-offset-4 hover:text-[#16130d] transition-colors"
-            href="/"
-          >
+          <Link className="decline-back" href="/">
             Voltar ao início
-          </a>
+          </Link>
         </div>
 
-        <div className="flex justify-center md:justify-end">
-          <div className="relative w-72 h-72 md:w-80 md:h-80 rounded-2xl bg-[#1e1e1e] border border-white/10 flex items-center justify-center shadow-2xl overflow-hidden">
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{ background: "radial-gradient(ellipse at 50% 50%, #f5a623 0%, transparent 70%)" }}
-              aria-hidden="true"
-            />
+        <div className="decline-visual-wrap">
+          <div className="decline-visual">
             <Image
               src="/alpha-logo-white.png"
               alt="Alpha Jurídico"
               width={200}
               height={57}
               priority
-              className="relative z-10"
             />
           </div>
         </div>
