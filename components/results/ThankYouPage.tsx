@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import "@/app/results.css";
 
 // Rendered identically by both /obrigado and /agradecimento — the route is
 // the only thing that differs, and only for internal analytics/CRM. Never

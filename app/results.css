@@ -1,0 +1,183 @@
+/* =========================================================
+   Páginas de resultado: /obrigado (qualificado) e
+   /agradecimento (desqualificado). Mesma estrutura de antes,
+   só com a paleta preto + amarelo da Alpha. Classes com
+   prefixo próprio para não colidir com a landing (o Next não
+   descarrega CSS global ao navegar entre rotas).
+   ========================================================= */
+
+/* /obrigado */
+.thanks-page {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(32px, 6vw, 72px) 20px;
+}
+.thanks-shell { width: min(100%, 760px); margin: 0 auto }
+.thanks-header { display: flex; justify-content: center; margin-bottom: 28px }
+.thanks-hero { text-align: center; margin-bottom: 32px }
+.thanks-page .eyebrow {
+  color: var(--brand);
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.thanks-hero h1 {
+  color: var(--text);
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  margin: 12px 0 16px;
+}
+.thanks-intro { color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 560px; margin: 0 auto }
+.thanks-process-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(22px, 4vw, 32px);
+  margin-top: 28px;
+  background: var(--card);
+}
+.thanks-process-heading h2 { color: var(--text); font-size: 22px; font-weight: 800; margin: 8px 0 0 }
+.thanks-steps { list-style: none; margin: 24px 0 0; padding: 0 }
+.thanks-steps li {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.thanks-steps li:first-child { border-top: 0; padding-top: 0 }
+.thanks-steps li span {
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+.thanks-steps li p { margin: 0; color: var(--text); font-size: 15px; line-height: 1.5; padding-top: 5px }
+
+/* /agradecimento */
+.decline-page {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+}
+.decline-grid {
+  width: 100%;
+  max-width: 1024px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.decline-content > * + * { margin-top: 24px }
+.decline-badge {
+  display: inline-block;
+  background: var(--brand);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+.decline-content h1 {
+  margin-bottom: 0;
+  color: var(--text);
+  font-size: clamp(36px, 4.6vw, 48px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.decline-text { color: var(--muted); font-size: 16px; line-height: 1.65; max-width: 384px; margin-bottom: 0 }
+.decline-cta { color: var(--brand); font-weight: 600; font-size: 16px; line-height: 1.65; margin-bottom: 0 }
+.decline-social { display: flex; align-items: center; gap: 12px; padding-top: 4px }
+.decline-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--text);
+  transition: background .16s, color .16s, border-color .16s;
+}
+.decline-social a:hover { background: var(--brand); border-color: var(--brand); color: var(--ink) }
+.decline-back {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color .16s;
+}
+.decline-back:hover { color: var(--text) }
+.decline-visual-wrap { display: flex; justify-content: flex-end }
+.decline-visual {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid #ffffff1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px #00000080;
+}
+.decline-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .2;
+  background: radial-gradient(ellipse at 50% 50%, var(--brand) 0%, transparent 70%);
+}
+.decline-visual img { position: relative; z-index: 1 }
+@media (max-width: 767px) {
+  .decline-grid { grid-template-columns: 1fr; gap: 48px }
+  .decline-visual-wrap { justify-content: center }
+  .decline-visual { width: 288px; height: 288px }
+}
+
+.voltar-inicio-dot {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .18s, transform .18s;
+  z-index: 40;
+}
+.voltar-inicio-dot:hover,
+.voltar-inicio-dot:focus-visible,
+.voltar-inicio-dot:active {
+  border-color: var(--brand);
+  transform: scale(1.1);
+}

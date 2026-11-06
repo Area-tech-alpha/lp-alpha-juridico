@@ -1,37 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { BRAND_NAME } from "@/lib/config";
+import { SEO } from "@/lib/landing";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const SITE_TITLE = "Diagnóstico de Crescimento | Alpha Jurídico";
-const SITE_DESCRIPTION =
-  "Responda 6 perguntas sobre o seu escritório e fale com um especialista da Alpha Jurídico.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://cadastro.assessorialpha.com"),
-  title: SITE_TITLE,
-  description: SITE_DESCRIPTION,
+  title: SEO.title,
+  description: SEO.description,
   openGraph: {
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    title: SEO.title,
+    description: SEO.description,
     url: "/",
-    siteName: "Alpha Jurídico",
+    siteName: BRAND_NAME,
+    locale: "pt_BR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    title: SEO.title,
+    description: SEO.description,
   },
 };
 
@@ -40,10 +34,7 @@ const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="pt-BR" className={geist.variable} data-scroll-behavior="smooth">
       {GTM_ID && (
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
