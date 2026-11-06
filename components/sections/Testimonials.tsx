@@ -21,8 +21,8 @@ export function Testimonials() {
   const trackRef = useRef<HTMLUListElement>(null);
   const hasVideos = VIDEO_TESTIMONIALS.length > 0;
   const count = hasVideos ? VIDEO_TESTIMONIALS.length : TESTIMONIALS.length;
-  // Com até 2 cards não há o que rolar no desktop: centraliza e some com as setas.
-  const isFew = count <= 2;
+  // Com até 3 cards não há o que rolar no desktop: centraliza e some com as setas.
+  const isFew = count <= 3;
 
   // Só um vídeo toca por vez: ao dar play em um, pausa os outros.
   function handlePlay(event: SyntheticEvent<HTMLVideoElement>) {
@@ -69,13 +69,20 @@ export function Testimonials() {
                       controls
                       playsInline
                       preload="none"
-                      aria-label={`Depoimento de ${item.name}`}
+                      aria-label={`Depoimento de ${item.name || item.company || "cliente"}`}
                       onPlay={handlePlay}
                     />
                   </div>
                   <div className="video-meta">
-                    <strong>{item.name}</strong>
-                    {item.company ? <span>{item.company}</span> : null}
+                    {item.highlight ? <p className="video-highlight">{item.highlight}</p> : null}
+                    {item.name ? (
+                      <>
+                        <strong>{item.name}</strong>
+                        {item.company ? <span>{item.company}</span> : null}
+                      </>
+                    ) : item.company ? (
+                      <strong>{item.company}</strong>
+                    ) : null}
                   </div>
                 </li>
               ))
