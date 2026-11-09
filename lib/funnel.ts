@@ -8,7 +8,6 @@ import {
   FORM_NAME,
   LEAD_ORIGIN,
   LEAD_SOURCE,
-  LEAD_WEBHOOK_URL,
   META_PIXEL_ID,
   N8N_WEBHOOK_URL,
 } from "./config";
@@ -92,7 +91,8 @@ export function submitLead(finalData: Answers, session: LeadSession): ResultRout
     }).catch(() => {});
   }
 
-  fetch(LEAD_WEBHOOK_URL, {
+  // O lead vai para a rota do próprio site, que repassa ao CRM com a chave (app/api/lead).
+  fetch("/api/lead", {
     method: "POST",
     keepalive: true,
     headers: { "Content-Type": "application/json" },

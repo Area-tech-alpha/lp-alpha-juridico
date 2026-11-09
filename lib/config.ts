@@ -21,7 +21,4 @@ export const LEAD_SOURCE = "site";
 // Webhook do n8n que recebe o lead ao final do funil.
 export const N8N_WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || "";
 
-// Webhook adicional (mesmo payload do lead + identificador de origem da LP).
-export const LEAD_WEBHOOK_URL =
-  "https://webhook3.assessorialpha.com/webhook/197edb9e-9848-472f-8aaa-76bed45da2a5";
 export const LEAD_ORIGIN = "juridico";
