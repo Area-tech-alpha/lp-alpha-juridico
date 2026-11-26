@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Lead
+
+O formulário chama `app/api/lead` (servidor), que repassa o lead para a entrada de leads do CRM:
+`POST {CRM_API_URL}/external/lead-intake/food/lp`, com `x-api-key` = `LEAD_INTAKE_FOOD_KEY` do CRM e
+`origem: "juridico"` (`LEAD_ORIGIN` em `lib/config.ts`). O CRM aplica a régua do jurídico (por
+faturamento; "Sou apenas eu" fica de fora) e o lead entra na Matriz. Nada vai mais ao n8n.
+
+Envs (só servidor, **Sensitive** na Vercel): `CRM_API_URL` e `CRM_LEAD_INTAKE_FOOD_KEY`.
+Públicas: `NEXT_PUBLIC_GTM_ID` e `NEXT_PUBLIC_META_PIXEL_ID`.
+
 ## Getting Started
 
 First, run the development server:
