@@ -38,3 +38,17 @@ export function readAttribution(): Attribution {
     landing_page: window.location.href,
   };
 }
+
+// fbclid da URL e fbc/fbp dos cookies do Pixel (_fbc/_fbp), lidos na hora do envio. Sem cookie,
+// o fbc segue o formato do Meta a partir do fbclid. Vão com o lead para o CRM (atribuição).
+export function readMetaIds(): { fbclid?: string; fbc?: string; fbp?: string } {
+  if (typeof window === "undefined") return {};
+  const cookie = (name: string) => {
+    const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
+    return match ? decodeURIComponent(match[1]) : undefined;
+  };
+  const fbclid = new URLSearchParams(window.location.search).get("fbclid") || undefined;
+  const fbc = cookie("_fbc") || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined);
+  const fbp = cookie("_fbp");
+  return { ...(fbclid && { fbclid }), ...(fbc && { fbc }), ...(fbp && { fbp }) };
+}

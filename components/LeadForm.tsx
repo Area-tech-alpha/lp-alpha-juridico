@@ -1,7 +1,7 @@
 "use client";
 
 // Formulário de lead — componente IDÊNTICO nas 3 LPs. Campos vêm de
-// lib/steps.ts; validação, eventos, webhooks e redirecionamento vêm de
+// lib/steps.ts; validação, eventos, envio do lead e redirecionamento vêm de
 // lib/funnel.ts (específico de cada LP).
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";

@@ -1,6 +1,6 @@
 // Configuração de marca e integrações da LP Alpha Jurídico. Valores que antes
 // ficavam fixos dentro de app/components/DiagnosticForm.tsx foram mantidos
-// iguais; só GTM, Meta Pixel e n8n vêm de env vars (ver .env.local).
+// iguais; só GTM e Meta Pixel vêm de env vars (ver .env.local).
 
 export const BRAND_NAME = "Alpha Jurídico";
 export const BRAND_HEADLINE = "A Maior Assessoria de Marketing Nichada da América Latina!";
@@ -17,8 +17,5 @@ export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
 // Identificação do formulário no evento generate_lead (dataLayer).
 export const FORM_NAME = "diagnostico_alpha_juridico";
 export const LEAD_SOURCE = "site";
-
-// Webhook do n8n que recebe o lead ao final do funil.
-export const N8N_WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || "";
 
 export const LEAD_ORIGIN = "juridico";
